@@ -1,0 +1,30 @@
+DECLARE
+
+  i INTEGER := 0; -- Recebe 0 como valor inicial;
+  
+BEGIN
+  
+  FOR t IN (SELECT SEQIDENTIFICA FROM GEV_PESSOALOGALTERACAO B 
+             WHERE USUALTERACAO = 'IMPORTACAO' AND HISTORICO LIKE '%Status%' 
+               AND DTAHORALTERACAO BETWEEN DATE '2022-11-27' AND SYSDATE) -- Status alterados pelo Job de Importação
+    
+  LOOP
+    BEGIN
+      i := i+1;
+      
+      UPDATE CONSINCO.GE_PESSOA A SET STATUS = 'A', USUALTERACAO = 'IMPORTACAO', A.DTAALTERACAO = SYSDATE
+       WHERE A.SEQPESSOA = T.SEQIDENTIFICA AND A.STATUS = 'I';
+
+      IF i = 10 THEN COMMIT;
+      i:= 0;
+      END IF;
+       
+      EXCEPTION
+         WHEN OTHERS THEN
+           DBMS_OUTPUT.PUT_LINE('ERRO: '||T.SEQIDENTIFICA);
+      END;
+      
+   END LOOP;
+   COMMIT;
+   
+END;
