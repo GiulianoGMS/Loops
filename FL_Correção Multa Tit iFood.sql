@@ -1,5 +1,6 @@
 -- Backup na CONSINCO.NAGT_BACKUPIFOOD
 
+DECLARE
 
  i INTEGER := 0;
  
