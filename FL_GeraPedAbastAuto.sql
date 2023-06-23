@@ -24,7 +24,7 @@ DECLARE
                DTAGERPEDIDO     = TRUNC( SYSDATE ),
                USUGERPEDIDO     = 'JOBABASTAUTO',
                SITUACAOLOTE     = 'F',
-               INCREMENTOMEDIAVENDA = NULL                      ,
+               INCREMENTOMEDIAVENDA = NULL,
                TIPOSUGCOMPRA    = 'P',
                INDMINMAXQTD     = 'N',
                INDMINMAXDIAVDA  = 'N'
