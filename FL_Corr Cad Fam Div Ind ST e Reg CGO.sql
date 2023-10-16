@@ -27,10 +27,12 @@ DECLARE
          BEGIN
            i := i+1;
        UPDATE CONSINCO.MAP_FAMDIVISAO X SET X.INDMERCENQUADST   = 'S',
-                                            X.INDUSADADOSREGCGO = 'S'
+                                            X.INDUSADADOSREGCGO = 'S',
+                                            X.USUARIOALTERACAO  = 'TKT300360',
+                                            X.DTAHORALTERACAO   =  SYSDATE
                                      
         WHERE 1=1 
-          AND T.SEQFAMILIA = X.SEQFAMILIA 
+          AND T.SEQFAMILIA = X.SEQFAMILIA; 
           IF i = 10 THEN COMMIT;
           i := 0;
           END IF;
@@ -39,5 +41,4 @@ DECLARE
        END LOOP;
    COMMIT;
  END;
-    
     
