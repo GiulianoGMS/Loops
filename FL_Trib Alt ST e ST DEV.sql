@@ -1,3 +1,9 @@
+-- Backup
+/*
+CREATE TABLE NAGT_MAP_TRIBUTACAOUF_BKP AS
+SELECT * FROM CONSINCO.MAP_TRIBUTACAOUF
+*/
+
 -- 1
 -- SP X SP e RJ XRJ  Quando tiver preenchido o campo Isento qualquer valor os campos  Situação tributaria  e  Situação tributaria Devolução vai ser 070
 
@@ -7,13 +13,13 @@ DECLARE
   BEGIN
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
-                 AND NROTRIBUTACAO IN (553))
+                 )
                  
    LOOP
      BEGIN
@@ -35,18 +41,19 @@ DECLARE
       END LOOP;
       
      COMMIT;
+
      
   -- DEV
   
      FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                   FROM CONSINCO.MAP_TRIBUTACAOUF X 
-                 WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+                 WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                    AND X.UFEMPRESA       IN ('SP','RJ')
                    AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) > 0
-                   AND NROTRIBUTACAO IN (553))
+                   )
                      
      LOOP
        BEGIN
@@ -75,13 +82,13 @@ DECLARE
 
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060')-- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND NROTRIBUTACAO IN (553))
+                 )
                  
    LOOP
      BEGIN
@@ -108,13 +115,13 @@ DECLARE
 
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND NROTRIBUTACAO IN (553))
+                 )
                  
    LOOP
      BEGIN
@@ -143,14 +150,14 @@ DECLARE
 
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC NOT IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
-                 AND NROTRIBUTACAO IN (553))
+                 )
                  
    LOOP
      BEGIN
@@ -177,14 +184,14 @@ DECLARE
 
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED', 'EM') 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC NOT IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
-                 AND NROTRIBUTACAO IN (553))
+                 )
                  
    LOOP
      BEGIN
@@ -207,4 +214,166 @@ DECLARE
       
      COMMIT;
   
-   END;
+-- 4
+-- SP e RJ X demais estados no campo Situação tributaria 060 vai ficar 010 e permanece 00 no campo Situação tributaria Devolução.
+
+
+    FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
+                FROM CONSINCO.MAP_TRIBUTACAOUF X 
+               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED') 
+                 AND X.UFEMPRESA       IN ('SP','RJ')
+                 AND X.UFCLIENTEFORNEC NOT IN ('SP','RJ')
+                 AND NROREGTRIBUTACAO  IN (0,2) 
+                 AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
+                 AND SITUACAONFDEV = '000'
+                 )
+                 
+   LOOP
+     BEGIN
+       i := i+1;
+       UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET Z.SITUACAONF       = '010',
+                                              --Z.SITUACAONFDEV    = '010',
+                                              Z.USUALTERACAO     = 'TKT313247'
+                                        WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                          AND Z.UFEMPRESA        = T.UFEMPRESA
+                                          AND Z.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                          AND Z.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                          AND Z.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+                                          
+            IF i = 1000 THEN COMMIT;
+            i := 0;
+           END IF;
+            
+      END;
+      END LOOP;
+      
+     COMMIT;
+     
+-- 5 EM
+-- Micro Empresa no Regime Normal e Fabricante Comercio Atacadista em SP e RJ.
+
+-- Regime Normal e Atacado - SP e RJ X demais  e demais Quando tiver preenchido o campo Situação tributaria 060 fica 202 e  Situação tributaria Devolução quando tiver 090 fica 202 os demais campos não altera.
+
+   FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
+                FROM CONSINCO.MAP_TRIBUTACAOUF X 
+               WHERE X.TIPTRIBUTACAO   IN ('EM') 
+                 AND X.UFEMPRESA       IN ('SP','RJ')
+                 AND X.CALCICMSDESCSUFRAMA NOT IN ('SP','RJ')
+                 AND NROREGTRIBUTACAO  IN (0,2) 
+                 AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
+                 )
+                 
+   LOOP
+     BEGIN
+       i := i+1;
+       UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET Z.SITUACAONF       = '202',
+                                              --Z.SITUACAONFDEV    = '010',
+                                              Z.USUALTERACAO     = 'TKT313247'
+                                        WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                          AND Z.UFEMPRESA        = T.UFEMPRESA
+                                          AND Z.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                          AND Z.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                          AND Z.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+                                          
+            IF i = 1000 THEN COMMIT;
+            i := 0;
+           END IF;
+            
+      END;
+      END LOOP;
+      
+     COMMIT;
+     
+-- DEV
+
+   FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
+                FROM CONSINCO.MAP_TRIBUTACAOUF X 
+               WHERE X.TIPTRIBUTACAO   IN ('EM') 
+                 AND X.UFEMPRESA       IN ('SP','RJ')
+                 AND NROREGTRIBUTACAO  IN (0,2) 
+                 AND SITUACAONFDEV = '090'
+                 )
+                 
+   LOOP
+     BEGIN
+       i := i+1;
+       UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET --Z.SITUACAONF       = '202',
+                                              Z.SITUACAONFDEV    = '202',
+                                              Z.USUALTERACAO     = 'TKT313247'
+                                        WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                          AND Z.UFEMPRESA        = T.UFEMPRESA
+                                          AND Z.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                          AND Z.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                          AND Z.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+                                          
+            IF i = 1000 THEN COMMIT;
+            i := 0;
+           END IF;
+            
+      END;
+      END LOOP;
+      
+     COMMIT;  
+-- Regime Atacado - SP X SP e RJ XRJ  Quando tiver preenchido o campo  Situação tributaria 060 fica 500 e Situação tributaria Devolução quando tiver 060 fica 500 os demais campos não altera.
+     
+   FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
+                FROM CONSINCO.MAP_TRIBUTACAOUF X 
+               WHERE X.TIPTRIBUTACAO   IN ('EM')
+                 AND X.UFCLIENTEFORNEC IN ('SP','RJ') 
+                 AND X.UFEMPRESA       IN ('SP','RJ')
+                 AND NROREGTRIBUTACAO  IN (2) 
+                 AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
+                 )
+                 
+   LOOP
+     BEGIN
+       i := i+1;
+       UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET Z.SITUACAONF       = '500',
+                                              --Z.SITUACAONFDEV    = '010',
+                                              Z.USUALTERACAO     = 'TKT313247'
+                                        WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                          AND Z.UFEMPRESA        = T.UFEMPRESA
+                                          AND Z.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                          AND Z.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                          AND Z.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+                                          
+            IF i = 1000 THEN COMMIT;
+            i := 0;
+           END IF;
+            
+      END;
+      END LOOP;
+      
+     COMMIT;
+
+-- DEV
+
+   FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
+                FROM CONSINCO.MAP_TRIBUTACAOUF X 
+               WHERE X.TIPTRIBUTACAO   IN ('EM')
+                 AND X.UFCLIENTEFORNEC IN ('SP','RJ') 
+                 AND X.UFEMPRESA       IN ('SP','RJ')
+                 AND NROREGTRIBUTACAO  IN (2) 
+                 AND SITUACAONFDEV = '060'
+                 )
+                 
+   LOOP
+     BEGIN
+       i := i+1;
+       UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET --Z.SITUACAONF       = '500',
+                                              Z.SITUACAONFDEV    = '500',
+                                              Z.USUALTERACAO     = 'TKT313247'
+                                        WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                          AND Z.UFEMPRESA        = T.UFEMPRESA
+                                          AND Z.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                          AND Z.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                          AND Z.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+                                          
+            IF i = 1000 THEN COMMIT;
+            i := 0;
+           END IF;
+            
+      END;
+      END LOOP;
+     
+     END;
