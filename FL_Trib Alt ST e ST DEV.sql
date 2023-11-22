@@ -13,12 +13,13 @@ DECLARE
   BEGIN
     FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NROREGTRIBUTACAO, SITUACAONF, SITUACAONFDEV
                 FROM CONSINCO.MAP_TRIBUTACAOUF X 
-               WHERE X.TIPTRIBUTACAO   IN ('EI', 'ED')  
+               WHERE X.TIPTRIBUTACAO   IN ('EI','ED')  
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -53,6 +54,7 @@ DECLARE
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) > 0
+                   AND X.NROTRIBUTACAO IN (143,280)
                    )
                      
      LOOP
@@ -88,6 +90,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060')-- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -121,6 +124,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -157,6 +161,7 @@ DECLARE
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -191,6 +196,7 @@ DECLARE
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -226,6 +232,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND SITUACAONFDEV = '000'
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -261,6 +268,7 @@ DECLARE
                  AND X.CALCICMSDESCSUFRAMA NOT IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -292,13 +300,14 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND SITUACAONFDEV = '090'
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
      BEGIN
        i := i+1;
        UPDATE CONSINCO.MAP_TRIBUTACAOUF Z SET --Z.SITUACAONF       = '202',
-                                              Z.SITUACAONFDEV    = '202',
+                                              Z.SITUACAONFDEV    = 202,
                                               Z.USUALTERACAO     = 'TKT313247'
                                         WHERE Z.NROTRIBUTACAO    = T.NROTRIBUTACAO
                                           AND Z.UFEMPRESA        = T.UFEMPRESA
@@ -323,6 +332,7 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
@@ -355,6 +365,7 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (2) 
                  AND SITUACAONFDEV = '060'
+                 AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
    LOOP
