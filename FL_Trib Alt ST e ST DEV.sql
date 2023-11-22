@@ -387,4 +387,6 @@ DECLARE
       END;
       END LOOP;
      
+     COMMIT;
+     
      END;
