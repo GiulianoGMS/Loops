@@ -18,7 +18,7 @@ DECLARE
                  AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
-                 AND NVL(X.PERISENTO,0) > 0
+                 AND NVL(X.PERISENTO,0) >= 0
                  AND X.NROTRIBUTACAO IN (143,280)
                  )
                  
@@ -53,7 +53,7 @@ DECLARE
                    AND X.UFCLIENTEFORNEC IN ('SP','RJ')
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
-                   AND NVL(X.PERISENTO,0) > 0
+                   AND NVL(X.PERISENTO,0) >= 0
                    AND X.NROTRIBUTACAO IN (143,280)
                    )
                      
@@ -386,7 +386,7 @@ DECLARE
             
       END;
       END LOOP;
-     
+      
      COMMIT;
      
      END;
