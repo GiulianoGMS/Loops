@@ -4,6 +4,8 @@ CREATE TABLE NAGT_MAP_TRIBUTACAOUF_BKP AS
 SELECT * FROM CONSINCO.MAP_TRIBUTACAOUF
 */
 
+-- Updates divididos por UF / Regra / ST e ST DEV 
+
 -- 1
 -- SP X SP e RJ XRJ  Quando tiver preenchido o campo Isento qualquer valor os campos  Situação tributaria  e  Situação tributaria Devolução vai ser 070
 
@@ -381,7 +383,9 @@ DECLARE
       END LOOP;
       
      COMMIT;
-     /*
+
+/* Retirado - não sera mais necessário corrigir EM
+
 -- 5 EM
 -- Micro Empresa no Regime Normal e Fabricante Comercio Atacadista em SP e RJ.
 
