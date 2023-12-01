@@ -1,8 +1,40 @@
 -- Backup
-/*
+
 CREATE TABLE NAGT_MAP_TRIBUTACAOUF_BKP AS
 SELECT * FROM CONSINCO.MAP_TRIBUTACAOUF
-*/
+
+-- Loop de Retorno do Backup caso a alteracao nao esteja correta
+
+DECLARE 
+  i INTEGER := 0;
+  
+  BEGIN
+    FOR t IN (SELECT DISTINCT X.NROTRIBUTACAO, X.SITUACAONF, X.SITUACAONFDEV, X.UFEMPRESA, X.UFCLIENTEFORNEC, X.TIPTRIBUTACAO, X.NROREGTRIBUTACAO 
+                FROM NAGT_MAP_TRIBUTACAOUF_BKP X INNER JOIN MAP_TRIBUTACAOUF Q ON X.NROTRIBUTACAO = Q.NROTRIBUTACAO
+                                                                              AND X.UFEMPRESA     = Q.UFEMPRESA
+                                                                              AND X.UFCLIENTEFORNEC = Q.UFCLIENTEFORNEC
+                                                                              AND X.TIPTRIBUTACAO = Q.TIPTRIBUTACAO
+                                                                              AND X.NROREGTRIBUTACAO = Q.NROREGTRIBUTACAO
+                      WHERE Q.SITUACAONF    != X.SITUACAONF
+                         OR Q.SITUACAONFDEV != X.SITUACAONFDEV)
+  LOOP
+    BEGIN
+       i := i+1;
+    UPDATE CONSINCO.MAP_TRIBUTACAOUF U SET U.SITUACAONF       = T.SITUACAONF,
+                                           U.SITUACAONFDEV    = T.SITUACAONFDEV
+                                     WHERE U.NROTRIBUTACAO    = T.NROTRIBUTACAO
+                                       AND U.UFEMPRESA        = T.UFEMPRESA
+                                       AND U.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
+                                       AND U.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
+                                       AND U.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
+    IF i = 10 THEN COMMIT;
+       i := 0;
+    END IF;
+            
+      END;
+  END LOOP;
+ COMMIT;
+END;  
 
 -- Updates divididos por UF / Regra / ST e ST DEV 
 
