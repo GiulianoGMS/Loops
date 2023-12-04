@@ -1,3 +1,5 @@
+ALTER SESSION SET CURRENT_SCHEMA = CONSINCO;
+
 -- Backup
 
 CREATE TABLE CONSINCO.NAGT_MAP_TRIBUTACAOUF_BKP AS
@@ -28,7 +30,7 @@ DECLARE
                                        AND U.UFCLIENTEFORNEC  = T.UFCLIENTEFORNEC
                                        AND U.TIPTRIBUTACAO    = T.TIPTRIBUTACAO
                                        AND U.NROREGTRIBUTACAO = T.NROREGTRIBUTACAO;
-    IF i = 10 THEN COMMIT;
+    IF i = 100 THEN COMMIT;
        i := 0;
     END IF;
             
@@ -37,7 +39,7 @@ DECLARE
  COMMIT;
 END;  
 
--- Updates divididos por UF / Regra / ST e ST DEV 
+-- Updates divididos por UF / Regra / ST e ST DEV - Apenas sobre CST 060 e CST DEV 090
 
 -- 1
 -- SP X SP e RJ XRJ  Quando tiver preenchido o campo Isento qualquer valor os campos  Situação tributaria  e  Situação tributaria Devolução vai ser 070
@@ -54,7 +56,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -86,7 +88,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2)
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -120,7 +122,7 @@ DECLARE
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) > 0
-                   AND X.NROTRIBUTACAO IN (58)
+                   
                    )
                      
      LOOP
@@ -152,7 +154,7 @@ DECLARE
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) > 0
-                   AND X.NROTRIBUTACAO IN (58)
+                   
                    )
                      
      LOOP
@@ -187,7 +189,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060')-- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -219,7 +221,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060')-- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -253,7 +255,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -285,7 +287,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -322,7 +324,7 @@ DECLARE
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -357,7 +359,7 @@ DECLARE
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
                  AND NVL(X.PERTRIBUTST,0) > 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -393,7 +395,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND SITUACAONFDEV = '000'
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -416,9 +418,7 @@ DECLARE
       END LOOP;
       
      COMMIT;
-
-/* Retirado - não sera mais necessário corrigir EM
-
+     /*
 -- 5 EM
 -- Micro Empresa no Regime Normal e Fabricante Comercio Atacadista em SP e RJ.
 
@@ -431,7 +431,7 @@ DECLARE
                  AND X.CALCICMSDESCSUFRAMA != X.UFEMPRESA
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -463,7 +463,7 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND SITUACAONFDEV = '090'
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -495,7 +495,7 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (2) 
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -528,7 +528,7 @@ DECLARE
                  AND X.UFEMPRESA       IN ('SP','RJ')
                  AND NROREGTRIBUTACAO  IN (2) 
                  AND SITUACAONFDEV = '060'
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -563,7 +563,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -595,7 +595,7 @@ DECLARE
                  AND NROREGTRIBUTACAO  IN (0,2) 
                  AND (SITUACAONF = '060') -- SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) = 0
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -630,7 +630,7 @@ DECLARE
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) = 0
-                   AND X.NROTRIBUTACAO IN (58)
+                   
                    )
                      
      LOOP
@@ -662,7 +662,7 @@ DECLARE
                    AND NROREGTRIBUTACAO  IN (0,2) 
                    AND (SITUACAONFDEV = '090')
                    AND NVL(X.PERISENTO,0) = 0
-                   AND X.NROTRIBUTACAO IN (58)
+                   
                    )
                      
      LOOP
@@ -697,7 +697,7 @@ DECLARE
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
                  AND NVL(X.PERTRIBUTST,0) > 0 AND NVL(X.PERTRIBUTST,0) < 100
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -732,7 +732,7 @@ DECLARE
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
                  AND NVL(X.PERTRIBUTST,0) > 0 AND NVL(X.PERTRIBUTST,0) < 100
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -767,7 +767,7 @@ FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NRORE
                  AND (SITUACAONF = '060') -- OR SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
                  AND NVL(X.PERTRIBUTST,0) = 100
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
@@ -802,7 +802,7 @@ FOR t IN (SELECT NROTRIBUTACAO, UFEMPRESA, UFCLIENTEFORNEC, TIPTRIBUTACAO, NRORE
                  AND (SITUACAONFDEV = '090')
                  AND NVL(X.PERISENTO,0) > 0
                  AND NVL(X.PERTRIBUTST,0) = 100
-                 AND X.NROTRIBUTACAO IN (58)
+                 
                  )
                  
    LOOP
