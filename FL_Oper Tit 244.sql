@@ -4,7 +4,7 @@ BEGIN
   FOR leo IN (SELECT *
                 FROM FI_TITULO XI
                WHERE CODESPECIE IN ('IFOOD')
-                 AND NROTITULO = 20240417
+                 AND NROTITULO BETWEEN 20240417 AND 20240421
                  AND NROEMPRESA = 1
                  AND XI.PERCADMINISTRACAO = 8)
                   
@@ -13,7 +13,7 @@ BEGIN
 UPDATE FI_TITULO XX SET XX.VLRPAGO = LEO.VLRPAGO + (SELECT SUM(XI.VLRORIGINAL) FROM FI_TITULO XI WHERE CODESPECIE IN ('VOIFOO') AND NROTITULO = LEO.NROTITULO AND NROEMPRESA = LEO.NROEMPRESA)
                   WHERE XX.SEQTITULO = LEO.SEQTITULO;
                  
-INSERT INTO FI_TITOPERACAO X (SELECT (SELECT MAX(X.SEQTITOPERACAO) +1 FROM FI_TITOPERACAO),
+INSERT INTO FI_TITOPERACAO X (SELECT (SELECT MAX(SEQTITOPERACAO) +1 FROM FI_TITOPERACAO),
                                      X.SEQLANCTO,
                                      X.CODOPERACAO,
                                      LEO.SEQTITULO,
@@ -30,7 +30,7 @@ INSERT INTO FI_TITOPERACAO X (SELECT (SELECT MAX(X.SEQTITOPERACAO) +1 FROM FI_TI
                                      X.OBSERVACAO,
                                      X.TIPOASSUMIDO,
                                      X.SEQCTACORRENTE,
-                                     (SELECT MAX(X.NROPROCESSO) +1 FROM FI_TITOPERACAO),
+                                     (SELECT MAX(NROPROCESSO) +1 FROM FI_TITOPERACAO),
                                      X.DTACONCILIACAO,
                                      X.USUCONCILIOU,
                                      X.SITUACAO,
