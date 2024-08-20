@@ -1,5 +1,6 @@
 -- Ticket 436061
 -- Giuliano em 06/08/2024
+-- Inserir a tabela no EXISTS da view NAGV_EMITENTEITWORKS para ir a emb = UN
 
 ALTER SESSION SET CURRENT_SCHEMA = CONSINCO;
 
