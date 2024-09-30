@@ -48,7 +48,7 @@ DECLARE
       i := 0;
    -- Teste - Envia email quando o lote for criado com sucesso
       CONSINCO.SP_ENVIA_EMAIL(CONSINCO.C5_TP_PARAM_SMTP(1),
-                            'giuliano.gomes@nagumo.com.br',                         -- DESTINÁRIO                                                   
+                            'email@email.com.br;email@email.com.br',                         -- DESTINÁRIO                                                   
                             'Lote de Compras gerado com sucesso! - Lote Modelo: '           || T.SEQLOTEMODELO, -- ASSUNTO                                   
                             'Hora Configurada: '||T.HORAMIN                                 ||CHR(10)||
                             'Data: '||TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:Mi:ss')             ||CHR(10)||
@@ -63,7 +63,7 @@ DECLARE
          COMMIT;
    -- Envia e-mail quando pedido apresentar erro na geração
          CONSINCO.SP_ENVIA_EMAIL(CONSINCO.C5_TP_PARAM_SMTP(1),
-                            'giuliano.gomes@nagumo.com.br;ricardo.santana@nagumo.com.br',                         -- DESTINÁRIO                                                   
+                            'email@email.com.br;email@email.com.br',                         -- DESTINÁRIO                                                   
                             'Erro na geração de lote de compras - Lote Modelo: '              || T.SEQLOTEMODELO, -- ASSUNTO                                   
                             'Lote Modelo: '|| T.SEQLOTEMODELO                                 ||CHR(10)||
                             'Data:   '     || TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:Mi:ss')       ||CHR(10)||
