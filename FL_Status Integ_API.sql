@@ -1,4 +1,4 @@
--- Ativa cadastros que tiveram status alterados pela API Meu Nagumo para Prospect 'P')
+-- Ativa cadastros que tiveram status alterados pela API  para Prospect 'P')
 
 DECLARE
 
