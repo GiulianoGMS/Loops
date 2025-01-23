@@ -7,7 +7,7 @@ BEGIN
   
   LOOP
     i := i+1;
-  UPDATE MAP_FAMILIA X SET X.CODCEST = RPAD(X.CODCEST,7,0),
+  UPDATE MAP_FAMILIA X SET X.CODCEST = LPAD(CODCEST,7,0),
                            X.USUARIOALTERACAO = 'TKT523216',
                            X.DTAHORALTERACAO = SYSDATE - 2
                      WHERE X.SEQFAMILIA = T.SEQFAMILIA;
