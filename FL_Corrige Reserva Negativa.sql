@@ -1,9 +1,9 @@
 -- Bkp
 
-CREATE TABLE NAGT_BKP_MRL_PRODUTOEMPRESA_NEG AS 
-SELECT * FROM MRL_PRODUTOEMPRESA X WHERE X.QTDRESERVADAVDA < 0;
+CREATE TABLE NAGT_BKP_MRL_PRODUTOEMPRESA_1809 AS 
+SELECT * FROM MRL_PRODUTOEMPRESA X WHERE 1=1;
 
--- Correcao do soluço
+-- Correcao
 
 DECLARE
   i INTEGER := 0;
@@ -11,27 +11,36 @@ DECLARE
 BEGIN
   FOR CD IN (SELECT NROEMPRESA FROM MAX_EMPRESA E WHERE NROEMPRESA BETWEEN 500 AND 599)
     LOOP
-  FOR empProdloop IN (SELECT EMP, SUM(QTDATENDIDA) QTY, SEQPRODUTO 
-                        FROM (
-                      SELECT nroempresaestq EMP,
-                             MADV_COMPOSICAORESERVAVDA.QTDATENDIDA,
-                             SEQPRODUTOBASE SEQPRODUTO
-                        FROM MADV_COMPOSICAORESERVAVDA
+  FOR empProdloop IN (SELECT EMP,
+                         SUM(QTDATENDIDA) QTY,
+                         Y.SEQPRODUTO,
+                         QTDRESERVADAVDA
+                    FROM (
+                          SELECT nroempresaestq EMP,
+                                 MADV_COMPOSICAORESERVAVDA.QTDATENDIDA,
+                                 SEQPRODUTOBASE SEQPRODUTO
+                            FROM MADV_COMPOSICAORESERVAVDA
+                           WHERE MADV_COMPOSICAORESERVAVDA.DTAINCLUSAO BETWEEN SYSDATE - 100 AND SYSDATE
+                             AND TO_NUMBER(MADV_COMPOSICAORESERVAVDA.NROEMPRESAESTQ) = CD.NROEMPRESA
 
-                       WHERE MADV_COMPOSICAORESERVAVDA.DTAINCLUSAO BETWEEN SYSDATE - 100 AND SYSDATE
-                         AND  TO_NUMBER(MADV_COMPOSICAORESERVAVDA.nroempresaestq) = CD.NROEMPRESA
+                          UNION ALL
 
-                      UNION ALL
-
-                      SELECT nroempresaestq,
-                             MADV_COMPOSICAORESERVAVDA.QTDATENDIDA,
-                             SEQPRODUTO
-                        FROM MADV_COMPOSICAORESERVAVDA
-                       WHERE MADV_COMPOSICAORESERVAVDA.DTAINCLUSAO BETWEEN SYSDATE - 100 AND SYSDATE
-                         AND nroempresaestq =  CD.NROEMPRESA
-                      ) base
-                      WHERE EXISTS (SELECT 1 FROM MRL_PRODUTOEMPRESA Y WHERE Y.QTDRESERVADAVDA < 0 AND Y.SEQPRODUTO = base.SEQPRODUTO AND Y.NROEMPRESA = base.EMP)
-                      GROUP BY EMP, SEQPRODUTO)
+                          SELECT nroempresaestq EMP,
+                                 MADV_COMPOSICAORESERVAVDA.QTDATENDIDA,
+                                 SEQPRODUTO
+                            FROM MADV_COMPOSICAORESERVAVDA
+                           WHERE MADV_COMPOSICAORESERVAVDA.DTAINCLUSAO BETWEEN SYSDATE - 100 AND SYSDATE
+                             AND nroempresaestq = CD.NROEMPRESA
+                         ) BASE
+                         
+                        INNER JOIN MRL_PRODUTOEMPRESA Y
+                           ON Y.SEQPRODUTO = BASE.SEQPRODUTO
+                          AND Y.NROEMPRESA = BASE.EMP
+                          
+                   GROUP BY EMP,
+                            Y.SEQPRODUTO,
+                            QTDRESERVADAVDA
+                  HAVING QTDRESERVADAVDA <> SUM(QTDATENDIDA))
   LOOP
     i := i + 1;
     UPDATE MRL_PRODUTOEMPRESA X SET X.QTDRESERVADAVDA = empProdLoop.Qty
